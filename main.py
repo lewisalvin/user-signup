@@ -37,23 +37,86 @@ def validate_username():
     username = request.form['username']
     password = request.form['password']
     verifyPassword = request.form['verifyPassword']
+    email = request.form['email']
 
     username_error = ''
     password_error = ''
     verifyPassword_error = ''
     email_error = ''
-    space_char = ''
+    space_char = ' '
+    at_sign = '@'
+    period = '.'
+   
+   
 
     if len(username) <= 0:
         
         username_error = 'Username must not be blank'
-        #return render_template('username_form.html', username_error = username_error) 
-        
-
+        # return render_template('username_form.html', username_error = username_error) 
 
     if verifyPassword != password:
         verifyPassword_error = 'Password does not match Verify Password'
-    return render_template('username_form.html', verifyPassword_error = verifyPassword_error, username = username)
+
+    if len(password) <=0:
+
+        password_error = 'Username must have more than 3 characters'   
+
+    if len(password) <3 or len(password) >20:
+
+        password_error = 'Password must be longer than 3 char and less than 20 char'     
+
+    if len(verifyPassword) <3 or len(verifyPassword) >20:
+
+        verifyPassword_error = 'Password must be longer than 3 char and less than 20 char'        
+
+    if len(verifyPassword) <=0:
+
+        verifyPassword_error = 'Password must have more than 3 characters'    
+
+    if password.isspace():
+        password_error = 'Password must not contain any spaces'
+
+    if not at_sign in email and len(email) >=1:
+
+        email_error = 'Email must contain @ sign'
+
+    if not period in email and len(email) >=1:
+
+        email_error = 'Email must contain a period'
+
+    if space_char in email and len(email) >=1:
+
+        email_error = 'Email must have no spaces' 
+
+    if len(email) >= 1 and len(email) <3 or len(email) >20:
+        email_error = 'Email must have more than 3 char and less than 20 char'
+        
+    
+                   
+
+
+
+
+     
+
+            
+        
+        # return render_template('username_form.html', verifyPassword_error = verifyPassword_error, 
+        # username = username)
+    if not username_error and not password_error and not verifyPassword_error and not email_error:
+        return redirect('/welcome')
+    else:    
+        return render_template('username_form.html', username_error=username_error,
+                           password_error=password_error, verifyPassword_error=verifyPassword_error,
+                           email_error=email_error)
+
+
+@app.route('/welcome')
+def welcome():
+    return render_template('welcome.html')
+
+
+        
 
     #if spaces(username) == True:
      #   username_error = 'Invalid username'
